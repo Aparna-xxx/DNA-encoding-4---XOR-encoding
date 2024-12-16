@@ -1,0 +1,34 @@
+The logic for the XOR encoding is as follows
+
+-The XOR operation has a unique property:
+    -A⊕A=0
+    -A⊕0=A
+    -A⊕B⊕B=A (because 𝐵⊕𝐵=0) This property allows for data recovery when two of the three components are available.
+
+-Each DNA strand consists of a payload (the data content) and an address block (meta-information).
+-The address block keeps track of whether the strand is original or derived (from XOR) and which strands were used to create it.
+-By storing A,B, and 𝐴⊕𝐵, we can lose any one of the three and still recover the missing strand.
+
+Eg
+    A=1010, address = 0001 (binary).
+    Strand: A = [1010, 0|0001]  (high bit 0 indicates it's original)
+
+    B=1100, address = 0010 (binary).
+    Strand: B = [1100, 0|0010]
+
+    A⊕B=1010⊕1100=0110
+    Derived Strand: 𝐴⊕𝐵=[0110,1∣0001∣0010]
+
+    We store all these 3 strands
+
+Recovery scenarios:
+
+Case 1:
+    A is lost, We have:
+    A⊕B=[0110,1∣0001∣0010]
+    From the XOR property:
+    A=(A⊕B)⊕B=0110⊕1100=1010
+    The address block 0001 confirms this is A.
+    The other two case scenarios work in a similar manner.
+
+
